@@ -15,10 +15,11 @@ const errorHandler = (err, req, res, next) => {
   }
 
   const status = err.status || err.statusCode || 500;
-  const isClientError = status < 500 && err.expose !== false;
+  // http-errors marks 4xx as exposable; a 5xx is only shown when the service opted in (e.g. the health check).
+  const isExposed = err.expose ?? status < 500;
 
-  // Server errors are logged and never leak internals to the client.
-  if (!isClientError) {
+  // Unexpected errors are logged and never leak internals to the client.
+  if (!isExposed) {
     console.error(err);
     return res.status(status).json({ success: false, message: 'Internal server error' });
   }

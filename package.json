@@ -1,13 +1,14 @@
 {
   "name": "inventory-management-bn",
   "version": "1.0.0",
-  "description": "Backend of inventory-management: barcode scan toggles products IN/OUT of the inventory",
+  "description": "Backend of inventory-management: salon stock ledger (stock in, take out, stock counts, reports)",
   "main": "app.js",
   "type": "commonjs",
   "private": true,
   "scripts": {
-    "start": "nodemon app.js",
-    "dev": "nodemon app.js"
+    "start": "node app.js",
+    "dev": "nodemon app.js",
+    "test": "node --test scripts/*.test.js"
   },
   "dependencies": {
     "cors": "^2.8.6",

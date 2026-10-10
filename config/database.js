@@ -10,6 +10,16 @@ const pool = mysql.createPool({
   connectionLimit: Number(process.env.DB_CONNECTION_LIMIT) || 10,
   // Read and write DATETIME values as UTC; the API returns ISO strings and the browser shows local time.
   timezone: 'Z',
+  // DECIMAL columns and SUM() results come back as numbers instead of strings.
+  decimalNumbers: true,
+  // TINYINT(1) flags (is_active, is_opening) come back as true/false.
+  typeCast: (field, next) => {
+    if (field.type === 'TINY' && field.length === 1) {
+      const value = field.string();
+      return value === null ? null : value === '1';
+    }
+    return next();
+  },
 });
 
 // Keep every session in UTC so CURRENT_TIMESTAMP defaults line up with `timezone: 'Z'` above,
